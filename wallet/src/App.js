@@ -2,7 +2,7 @@ import './App.css';
 import {useEffect, useState} from 'react';
 //Project 2024
 //Hello
-//darshan and touhid
+
 function App() {
 
   const[name, setName] = useState('');
