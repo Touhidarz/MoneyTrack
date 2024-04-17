@@ -40,7 +40,6 @@ function Home() {
       headers:{'Content-type':'application/json'},
       body:JSON.stringify({
         amount : amount,
-        // name:name.substring(price.length+1), 
         selectedPayment:selectedPayment, 
         datetime:datetime
       })
@@ -58,28 +57,33 @@ function Home() {
     }
     finally{
        e.target.reset();
-      
-      
     }
 
   }
   
   
-  let balance = 0;
-  for (const i of transaction) {
-    balance = balance + i.amount;
+  // let balance = 0;
+  // for (const i of transaction) {
+  //   balance = balance + i.amount;
     
+  // }
+  let totalBalance = 0;
+  for (const i of transaction) {
+    totalBalance += i.amount;
   }
+
+
  
   return (
     <main>
-      <h1> {balance} </h1>
+      <h1> {totalBalance} </h1>
+      
       <form onSubmit={handleSubmit} >
 
         <div className='basic'>
           
-          <button className='add'>+</button> 
-          <button className='sub'> - </button>
+          <button className='add'>Credit</button> 
+          <button className='sub'>Debit</button>
 
           <input type="number" 
             value={amount}
@@ -91,16 +95,10 @@ function Home() {
 
         </div>
 
-        <div className='description'>
-          {/* <input type="text"
-            value={description}
-            name='description'
-            
-            onChange={ev => setDescription(ev.target.value)} 
-          placeholder={'description'}></input> */}
+        <div className='payment'>
 
-          <label htmlFor="payment">Payment Method</label>
-            <select name="cars" id="cars" value={selectedPayment} onChange={handlePaymentChange}>
+          
+            <select className="Pmethods" id="methods" value={selectedPayment} onChange={handlePaymentChange}>
               <option value="Cash">Cash</option>
               <option value="Upi">Upi</option>
               <option value="Credit Card">Credit Card</option>
@@ -136,9 +134,6 @@ function Home() {
             </div>
 
             <div className="right">
-              {/* <div className={"price" + (transaction.price < 0 ? 'red' : 'green')}>
-                {transaction.price}
-              </div> */}
               <div className="datetime">{transaction.datetime}</div>
             </div>
 
@@ -147,10 +142,6 @@ function Home() {
         
 
       </div>
-
-      
-        
-      
 
     </main>
   );
