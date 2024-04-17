@@ -23,11 +23,10 @@ app.get('/.env', (req, res) => {
 
 app.post('/api/posttransaction', async (req, res) => {
   try {
-    const { name, price, description, datetime } = req.body;
+    const { amount, selectedPayment, datetime } = req.body;
     const transaction = new Transaction ({ 
-      name:name,
-      price:price, 
-      description:description, 
+      amount:amount,
+      selectedPayment:selectedPayment,
       datetime:datetime 
     });
     console.log('Transaction created:', transaction);

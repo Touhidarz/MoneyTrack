@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
 const TransactionSchema = new Schema({
-    name: { type: String, required: true },
-    price: { type: Number, required: true },
-    description: { type: String, required: true },
+    amount: { type: Number, required: true },
+    selectedPayment: { type: String, required: true },
     datetime: { type: String, required: true },
 });
 

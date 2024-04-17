@@ -5,10 +5,13 @@ import {useEffect, useState} from 'react';
 
 function Home() {
 
-  const[name, setName] = useState('');
+  const[amount, setAmount] = useState('');
   const[datetime, setDatetime] = useState('');
-  const[description, setDescription] = useState('');
   const[transaction, setTransaction] = useState([]);
+  const [selectedPayment, setSelectedPayment] = useState('');
+  const handlePaymentChange = (event) => {
+      setSelectedPayment(event.target.value);}
+  
 
   useEffect(() => {
     const settransaction = async () => {
@@ -30,44 +33,41 @@ function Home() {
   
   const handleSubmit = async (e)=>{
     e.preventDefault()
-    const price = name.split(' ')[0];
 
     try {
       const response = await fetch("http://localhost:4040/api/posttransaction",{
       method:"POST",
       headers:{'Content-type':'application/json'},
       body:JSON.stringify({
-        price : price,
-        name:name.substring(price.length+1), 
-        description:description, 
+        amount : amount,
+        // name:name.substring(price.length+1), 
+        selectedPayment:selectedPayment, 
         datetime:datetime
       })
       
     });
     
     console.log(response)
+      setAmount('');
+      setSelectedPayment('');
+      setDatetime('');
+      e.target.reset();
+      
     } catch (error) {
       console.log(error.message)
     }
     finally{
-      // e.target.reset();
-      setName('');
-      setDatetime('');
-      setDescription('');
+       e.target.reset();
+      
+      
     }
 
   }
-  // useEffect(() => {
-  //   setName('');
-  //     setDatetime('');
-  //     setDescription('');
   
-  // },[])
   
-
   let balance = 0;
   for (const i of transaction) {
-    balance = balance + i.price;
+    balance = balance + i.amount;
     
   }
  
@@ -77,13 +77,35 @@ function Home() {
       <form onSubmit={handleSubmit} >
 
         <div className='basic'>
-          <input type="text" 
-            value={name}
-            name='name'
-            onChange={ev => setName(ev.target.value)}
-            placeholder={'+10 samsung tv'} 
+          
+          <button className='add'>+</button> 
+          <button className='sub'> - </button>
+
+          <input type="number" 
+            value={amount}
+            name='amount'
+            onChange={ev => setAmount(ev.target.value)}
+            placeholder={'e.g; 500'} 
             required={true}
           ></input>
+
+        </div>
+
+        <div className='description'>
+          {/* <input type="text"
+            value={description}
+            name='description'
+            
+            onChange={ev => setDescription(ev.target.value)} 
+          placeholder={'description'}></input> */}
+
+          <label htmlFor="payment">Payment Method</label>
+            <select name="cars" id="cars" value={selectedPayment} onChange={handlePaymentChange}>
+              <option value="Cash">Cash</option>
+              <option value="Upi">Upi</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Cheque">Cheque</option>
+            </select>
 
           <input type="datetime-local" 
             value={datetime}
@@ -93,17 +115,13 @@ function Home() {
           ></input> 
 
         </div>
-
-        <div className='description'>
-          <input type="text"
-            value={description}
-            name='description'
-            
-            onChange={ev => setDescription(ev.target.value)} 
-          placeholder={'description'}></input>
+        
+        <div>
+          <button onClick={handleSubmit} type="submit">Submit</button>
+          <button type="submit">Transactions</button>
         </div>
         
-        <button type="submit">Add new Transaction</button>
+        
 
       </form>
 
@@ -113,14 +131,14 @@ function Home() {
           <div className="transaction">
 
             <div className="left">
-              <div className="name">{transaction.name}</div>
-              <div className="description">{transaction.description}</div>
+              <div className="amount">{transaction.amount}</div>
+              <div className="selectedPayment">{transaction.selectedPayment}</div>
             </div>
 
             <div className="right">
-              <div className={"price" + (transaction.price < 0 ? 'red' : 'green')}>
+              {/* <div className={"price" + (transaction.price < 0 ? 'red' : 'green')}>
                 {transaction.price}
-              </div>
+              </div> */}
               <div className="datetime">{transaction.datetime}</div>
             </div>
 
