@@ -47,6 +47,7 @@
     border-radius: 5px;
     padding: 5px;
     background-color: #ddd;
+    cursor: pointer;
   }
   
   div.transactions{
@@ -122,3 +123,12 @@
     font-size: 0.9rem;
   }
   
+
+  .credit{
+    color: rgb(28, 188, 28);
+
+  }
+
+  .debit{
+    color: rgb(246, 79, 79);
+  }
