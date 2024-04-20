@@ -5,9 +5,9 @@ import {useEffect, useState} from 'react';
 
 function Home() {
 
-  const[amount, setAmount] = useState('');
-  const[datetime, setDatetime] = useState('');
-  const[transaction, setTransaction] = useState([]);
+  const [amount, setAmount] = useState('');
+  const [datetime, setDatetime] = useState('');
+  const [transaction, setTransaction] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState('');
   const [totalBalance , setTotalBalance] = useState(0)
   const [balance, setBalance] = useState('');
@@ -60,9 +60,7 @@ function Home() {
 
   }
 
-  
-// Iterate through all transactions to calculate the total balance
- useEffect(() => {
+  useEffect(() => {
     // Calculate total balance when the component mounts or when transactions change
     let balance = 0;
     transaction.forEach(transaction => {
@@ -71,7 +69,50 @@ function Home() {
     setTotalBalance(balance);
   }, [transaction]);
 
+  // const handleSubmit = async (e, action) => {
+  //   e.preventDefault(); // Prevents the default action of the event (in this case, form submission)
+    
+  //   try {
+  //     let apiUrl = "http://localhost:4040/api/posttransaction";
+  //     let requestBody = {
+  //       amount: amount,
+  //       selectedPayment: selectedPayment,
+  //       datetime: datetime
+  //     };
 
+  //     // Check the action parameter to determine the desired action
+  //     if (action === 'add') {
+  //       // If the "Credit" button is clicked, add the amount to the balance
+  //       apiUrl = "http://localhost:4040/api/addBalance";
+  //       setTotalBalance(prev => prev + parseFloat(amount)); // Update total balance by adding the amount
+  //     } else if (action === 'sub') {
+  //       // If the "Debit" button is clicked, subtract the amount from the balance
+  //       apiUrl = "http://localhost:4040/api/subtractBalance";
+  //       setTotalBalance(prev => prev - parseFloat(amount)); // Update total balance by subtracting the amount
+  //     }
+
+  //     const response = await fetch(apiUrl, {
+  //       method: "POST",
+  //       headers: {
+  //         'Content-type': 'application/json'
+  //       },
+  //       body: JSON.stringify(requestBody)
+  //     });
+
+  //     console.log(response); // Logs the response from the API
+
+  //     // Reset the form fields after successful submission
+  //     setAmount('');
+  //     setSelectedPayment('');
+  //     setDatetime('');
+
+  //   } catch (error) {
+  //     console.log(error.message); // Logs any errors that occur during the fetch operation
+  //   }
+  // }
+
+
+  // function written for credit button
   const handleCredit = async (e) => {
     e.preventDefault(); // Prevents the default action of the event (in this case, form submission)
     console.log("credited"); // Logs "credited" to the console
@@ -101,7 +142,7 @@ function Home() {
     }
   }
 
-  
+ // function written for Debit button 
   const handleDebit = async (e)=>{
   e.preventDefault();
   console.log("debited")
@@ -130,11 +171,10 @@ function Home() {
   }
 }
 
-
   // home page
   return (
     <main>
-      <h1> {totalBalance} </h1>
+      <h1> Balance : {totalBalance} </h1>
       
       <form >
 
@@ -142,7 +182,9 @@ function Home() {
           
           <button className='add'type='submit' onClick={handleSubmit}>Credit</button> 
           <button className='sub'type='submit' onClick={handleDebit} >Debit</button>
-
+          {/* <button className='add' type='submit' onClick={(e) => handleSubmit(e, 'add')}>Credit</button>
+          <button className='sub' type='submit' onClick={(e) => handleSubmit(e, 'sub')}>Debit</button> */}
+      
           <input type="number" 
             value={amount}
             name='amount'
@@ -157,8 +199,7 @@ function Home() {
 
         <div className='payment'>
 
-          
-            <select className={`Pmethods `} id="methods" value={selectedPayment} onChange={handlePaymentChange}>
+            <select className={`Pmethods `} id="methods" value={selectedPayment} onChange={handlePaymentChange} required={true}>
               <option value="Cash">Cash</option>
               <option value="Upi">Upi</option>
               <option value="Credit Card">Credit Card</option>
@@ -187,7 +228,7 @@ function Home() {
           <div className="transaction">
 
             <div className="left">
-              <div className={`amount ${transaction.amount ? ("credit") : ("debit")}`}>{transaction.amount}</div>
+              <div className={`amount ${transaction.amount ? ("add") : ("sub")}`}>{transaction.amount}</div>
               <div className="selectedPayment">{transaction.selectedPayment}</div>
             </div>
 
